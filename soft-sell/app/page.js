@@ -297,7 +297,7 @@ export default function Home() {
             <a key={i} href="#" className="text-blue-500 dark:text-gray-300">{link}</a>
           ))}
         </div>
-        <div>© 2022 Soft Shell, Inc. • Privacy • Terms • Sitemap</div>
+        <div>© 2025 Soft Shell, Inc. • Privacy • Terms • Sitemap</div>
       </footer>
     </div>
   );
