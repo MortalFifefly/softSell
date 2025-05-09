@@ -1,5 +1,7 @@
-import { ArrowRight } from 'lucide-react'; // Importing ArrowRight from lucide-react
-import { Star } from 'lucide-react'; // Importing Star from lucide-react
+'use client'; // This is a client component in Next.js
+import { ArrowRight, Star } from 'lucide-react'; // Importing ArrowRight and Star from lucide-react
+import { motion, useInView } from 'framer-motion'; // Importing motion from framer-motion for animations
+import { useRef } from "react"; // Importing useRef from React
 
 // Reviews data
 const reviews = [
@@ -37,6 +39,12 @@ function renderStars(rating) {
 }
 
 export default function Home() {
+  const ref = useRef(null); // Create a ref to track the element's visibility
+  const isInView = useInView(ref, {
+    amount: 1, // 50% of the element should be in view
+    once: true
+  }); // Check if the element is in view
+
   return (
     <div className="font-sans">
       {/* Header Section */}
@@ -73,20 +81,45 @@ export default function Home() {
         <button className="border px-6 py-2 rounded-full text-blue-500 border-blue-500">Learn more</button>
       </div>
 
+      {/* Why Choose Us Section */}
+
+      <div className="py-16 px-4 bg-gray-50">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-800 ">Why Choose Us</h2>
+        <div className="max-w-3xl mx-auto space-y-6 text-center text-gray-700">
+          <div className="flex items-start gap-3">
+            <span className="text-blue-600 text-xl">✓</span>
+            <p><strong>Secure Transactions:</strong> We ensure every license transfer is safe, verified, and compliant.</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="text-blue-600 text-xl">✓</span>
+            <p><strong>Fast Valuations:</strong> Get real-time quotes for your unused software—no waiting days.</p>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="text-blue-600 text-xl">✓</span>
+            <p><strong>Trusted by Users:</strong> Hundreds of customers have already sold their licenses with ease.</p>
+          </div>
+        </div>
+      </div>
+
       {/* How it Works Section */}
       <div id="HowItWork" className="py-16 px-4 bg-gray-100">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">How it Works:</h2>
         <div className="flex items-center justify-between p-10 h-full">
           {/* Step 1 */}
-          <div className="bg-white p-6 rounded-xl shadow text-center w-1/4 h-full">
+          <motion.div
+            ref={ref} // Attach the ref to the motion div
+            initial={{ y: -20 }}
+            animate={useInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="bg-white p-6 rounded-xl shadow text-center w-1/4 h-full">
             <div className="text-xl font-semibold text-gray-800">Upload License</div>
             <div className="mt-2 text-sm text-gray-700">
               <img src="/upload-icon.png" alt="Upload License" className="mx-auto mb-4 w-12 h-12" />
               <p>Simply upload your unused software license to our platform.</p>
             </div>
-          </div>
-          
-          <ArrowRight size={48} className="text-gray-500"/>
+          </motion.div>
+
+          <ArrowRight size={48} className="text-gray-500" />
 
           {/* Step 2 */}
           <div className="bg-white p-6 rounded-xl shadow text-center w-1/4 h-full">
@@ -96,9 +129,9 @@ export default function Home() {
               <p>Receive a fair and fast valuation for your software license.</p>
             </div>
           </div>
-          
+
           <ArrowRight size={48} className="text-gray-500" />
-          
+
           {/* Step 3 */}
           <div className="bg-white p-6 rounded-xl shadow text-center w-1/4 h-full">
             <div className="text-xl font-semibold text-gray-800">Get Paid</div>
