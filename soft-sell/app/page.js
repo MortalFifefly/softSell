@@ -1,7 +1,8 @@
 'use client'; // This is a client component in Next.js
 import { ArrowRight, Star } from 'lucide-react'; // Importing ArrowRight and Star from lucide-react
 import { motion, useInView } from 'framer-motion'; // Importing motion from framer-motion for animations
-import { useRef } from "react"; // Importing useRef from React
+import { use, useRef } from "react"; // Importing useRef from React
+import { useEffect, useState } from "react"; // Importing useEffect and useState from React
 
 // Reviews data
 const reviews = [
@@ -39,18 +40,31 @@ function renderStars(rating) {
 }
 
 export default function Home() {
-  const ref = useRef(null); // Create a ref to track the element's visibility
-  const isInView = useInView(ref, {
-    amount: 1, // 50% of the element should be in view
-    once: true
-  }); // Check if the element is in view
+  const MotionArrowRight = motion(ArrowRight); // Create a motion version of the ArrowRight component
+  const [isDark, setIsDark] = useState(true); // State to manage dark mode
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      root.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDark]);
+
+  const toggleTheme = () => {
+    setIsDark(prev => !prev); // Toggle dark mode state
+  }
+  const duration = 0.2; // Animation duration
+  const delay = duration - 0.4 * duration; // Animation delay
 
   return (
     <div className="font-sans">
       {/* Header Section */}
-      <div className="bg-gray-100 p-4 shadow-md flex justify-between items-center">
-        <div className="text-xl font-bold text-gray-800">Soft Shell</div>
-        <div className="space-x-4 text-gray-600">
+      <div className="bg-gray-100 p-4 shadow-md flex justify-between items-center dark:bg-gray-800">
+        <div className="text-xl font-bold text-gray-800 dark:text-gray-200">Soft Shell</div>
+        <div className="space-x-4 text-gray-600 dark:text-gray-300">
           <a href="#features">How it Works</a>
           <a href="#about">About us</a>
           <a href="#pricing">Get Quote</a>
@@ -60,13 +74,13 @@ export default function Home() {
           <a href="#careers">Careers</a>
         </div>
         <div className="space-x-2">
-          <button className="text-blue-500">Login</button>
+          <button className="text-blue-500 dark:text-blue-300">Login</button>
           <button className="bg-blue-500 text-white px-4 py-1 rounded">Try for free</button>
         </div>
       </div>
 
       {/* Hero Section */}
-      <div className=" bg-indigo-600 text-center py-16">
+      <div className=" bg-indigo-600 text-center py-16 dark:bg-indigo-800">
         <h1 className="text-4xl font-bold text-gray-200">Sell Your Software Licenses with Ease</h1>
         <p className="mt-2 text-sm text-gray-300">Soft Shell helps individuals and businesses sell their software licenses directly to us.</p>
         <button className="mt-4 bg-white px-6 py-2 rounded-full font-semibold text-blue-500">Sign up</button>
@@ -107,10 +121,11 @@ export default function Home() {
         <div className="flex items-center justify-between p-10 h-full">
           {/* Step 1 */}
           <motion.div
-            ref={ref} // Attach the ref to the motion div
-            initial={{ y: -20 }}
-            animate={useInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
+            initial={{ x: 50, opacity: 0 }} // Initial state for animation
+            whileInView={{ x: 0, opacity: 1}}
+            viewport={{ once: true, amount: 1 }} // Animation will only trigger once when in view
+            // animate={useInView ? { x: 0, opacity: 1} : {}}
+            transition={{ duration: duration, ease: 'easeInOut' }} // Animation transition
             className="bg-white p-6 rounded-xl shadow text-center w-1/4 h-full">
             <div className="text-xl font-semibold text-gray-800">Upload License</div>
             <div className="mt-2 text-sm text-gray-700">
@@ -119,37 +134,47 @@ export default function Home() {
             </div>
           </motion.div>
 
-          <ArrowRight size={48} className="text-gray-500" />
+          <MotionArrowRight
+            initial={{ x: 30, opacity: 0 }} // Initial state for animation
+            whileInView={{ x: 0, opacity: 1}}
+            viewport={{ once: true, amount: 1 }} // Animation will only trigger once when in view
+            transition={{ duration: duration, ease: 'easeInOut', delay: delay }} // Animation transition
+          size={48} className="text-gray-500" />
 
           {/* Step 2 */}
-          <div className="bg-white p-6 rounded-xl shadow text-center w-1/4 h-full">
+          <motion.div 
+          initial={{ x: 30, opacity: 0 }} // Initial state for animation
+          whileInView={{ x: 0, opacity: 1}}
+          viewport={{ once: true, amount: 1 }} // Animation will only trigger once when in view
+          transition={{ duration: duration, ease: 'easeInOut', delay: duration }} // Animation transition
+          className="bg-white p-6 rounded-xl shadow text-center w-1/4 h-full">
             <div className="text-xl font-semibold text-gray-800">Get Valuation</div>
             <div className="mt-2 text-sm text-gray-700">
               <img src="/valuation-icon.png" alt="Get Valuation" className="mx-auto mb-4 w-12 h-12" />
               <p>Receive a fair and fast valuation for your software license.</p>
             </div>
-          </div>
+          </motion.div>
 
-          <ArrowRight size={48} className="text-gray-500" />
+          <MotionArrowRight 
+          initial={{ x: 30, opacity: 0 }} // Initial state for animation
+          whileInView={{ x: 0, opacity: 1}}
+          viewport={{ once: true, amount: 1 }} // Animation will only trigger once when in view
+          transition={{ duration: duration, ease: 'easeInOut', delay: 2 * delay + duration }} // Animation transition
+          size={48} className="text-gray-500" />
 
           {/* Step 3 */}
-          <div className="bg-white p-6 rounded-xl shadow text-center w-1/4 h-full">
+          <motion.div 
+          initial={{ x: 30, opacity: 0 }} // Initial state for animation
+          whileInView={{ x: 0, opacity: 1}}
+          viewport={{ once: true, amount: 1 }} // Animation will only trigger once when in view
+          transition={{ duration: duration, ease: 'easeInOut', delay: 2 * delay + duration }}
+          className="bg-white p-6 rounded-xl shadow text-center w-1/4 h-full">
             <div className="text-xl font-semibold text-gray-800">Get Paid</div>
             <div className="mt-2 text-sm text-gray-700">
               <img src="/payment-icon.png" alt="Get Paid" className="mx-auto mb-4 w-12 h-12" />
               <p>Get paid quickly and securely for your unused licenses.</p>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Customers Section */}
-      <div className="py-12 bg-white">
-        <div className="text-center text-lg font-medium text-gray-800 mb-6">Our customers</div>
-        <div className="flex justify-center flex-wrap gap-6">
-          {[...Array(8)].map((_, idx) => (
-            <div key={idx} className="text-center text-sm font-semibold text-gray-600">CUSTOMER</div>
-          ))}
+          </motion.div>
         </div>
       </div>
 
